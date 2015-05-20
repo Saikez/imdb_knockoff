@@ -1,5 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_config.rb')
 
+describe "GET /movies" do
+  it "responds OK"
+
+  it "lists the saved movies"
+
+  it "has a `new movie` link"
+end
+
 describe "GET /movies/new" do
   it "responds OK" do
     get "/movies/new"
