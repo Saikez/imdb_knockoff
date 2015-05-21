@@ -6,6 +6,6 @@ describe '/' do
   end
 
   it 'responds OK' do
-    assert last_response.ok?, "Wasn't OK!"
+    assert last_response.ok?, 'Wasn\'t OK!'
   end
 end

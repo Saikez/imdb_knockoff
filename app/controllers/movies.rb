@@ -1,4 +1,8 @@
 ImdbKnockoff::App.controllers :movies do
+  before :new, :create do
+    redirect url(:session, :new) unless session[:authenticated]
+  end
+
   get :new do
     render :new
   end
