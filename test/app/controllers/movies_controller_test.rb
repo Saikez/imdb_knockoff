@@ -92,12 +92,31 @@ describe 'POST /movies' do
   end
 end
 
-describe 'GET /movies:id/edit' do
-  it 'can edit a movie' do
+describe 'GET /movies/:id/edit' do
+  before do
     @movie = Movie.create!(name: 'Jaws', rating: 5)
-    get "/movies/#{@movie.id}/edit", { movie: { name: 'Not Jaws', rating: 3 } }, { 'rack.session' => { authenticated: true } }
+  end
 
-    assert_equal @movie.name, 'Not Jaws'
-    assert_equal @movie.rating, 3
+  describe 'when unauthenticated' do
+    it 'redirects to the login page' do
+      get "/movies/#{@movie.id}/edit",
+        { movie: { name: 'Not Jaws', rating: 3 } }
+
+      assert last_response.redirect?, 'Not redirecting'
+      assert_includes last_response.location, '/session/new'
+    end
+  end
+
+  describe 'when authenticated' do
+    it 'can edit a movie' do
+      get "/movies/#{@movie.id}/edit",
+        { movie: { name: 'Not Jaws', rating: 3 } },
+        { 'rack.session' => { authenticated: true } }
+
+      @movie.reload
+
+      assert_equal @movie.name, 'Not Jaws'
+      assert_equal @movie.rating, 3
+    end
   end
 end

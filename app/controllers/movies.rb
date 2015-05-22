@@ -1,5 +1,5 @@
 ImdbKnockoff::App.controllers :movies do
-  before :new, :create do
+  before :new, :create, :edit do
     redirect url(:session, :new) unless session[:authenticated]
   end
 
@@ -19,10 +19,21 @@ ImdbKnockoff::App.controllers :movies do
     end
   end
 
+  put :update, map: '/movies/:id/update' do
+    @movie = Movie.find(params[:id])
+
+    @movie.update_attributes(params[:movie])
+  end
+
   get :edit, map: 'movies/:id/edit' do
     @movie = Movie.find(params[:id])
 
-    render :edit
+    if @movie.valid?
+      Movie.update(@movie.id, params[:movie])
+      redirect url(:movies, :show, id: @movie.id)
+    else
+      render :edit
+    end
   end
 
   get :show, map: 'movies/:id' do
