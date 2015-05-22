@@ -65,7 +65,7 @@ end
 describe 'POST /movies' do
   describe 'when unauthenticated' do
     it 'redirects to the login page' do
-      post '/movies/create', { name: 'Jaws', rating: 5 }
+      post '/movies/create', { movie: { name: 'Jaws', rating: 5 } }
 
       assert last_response.redirect?, 'Not redirecting'
       assert_includes last_response.location, '/session/new'
@@ -75,7 +75,7 @@ describe 'POST /movies' do
   describe 'when authenticated' do
     before do
       post '/movies/create',
-        { name: 'Jaws', rating: 5 },
+        { movie: { name: 'Jaws', rating: 5 } },
         { 'rack.session' => { authenticated: true } }
     end
 

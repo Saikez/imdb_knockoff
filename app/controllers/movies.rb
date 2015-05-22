@@ -10,9 +10,13 @@ ImdbKnockoff::App.controllers :movies do
   end
 
   post :create do
-    movie = Movie.create!(params[:movie])
+    @movie = Movie.create(params[:movie])
 
-    redirect url(:movies, :show, id: movie.id)
+    if @movie.valid?
+      redirect url(:movies, :show, id: @movie.id)
+    else
+      render :new
+    end
   end
 
   get :show, map: 'movies/:id' do

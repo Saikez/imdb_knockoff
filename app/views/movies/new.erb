@@ -1,11 +1,19 @@
 <% form_for(@movie, url_for(:movies, :create)) do |m| %>
-  Name   : <%= m.text_field :name %><br />
-  Rating : <%= m.select :rating,
+  <% if @movie.errors.present? %>
+    <h2>Whoops!</h2>
+    <ul>
+      <% @movie.errors.full_messages.each do |error| %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <%= m.text_field_block :name, autofocus: true %>
+  <%= m.select_block :rating,
     :options => [['★', 1],
                  ['★★', 2],
                  ['★★★', 3],
                  ['★★★★', 4],
                  ['★★★★★', 5]],
-    :selected => [['★', 1]] %><br />
-  <%= m.submit %><br />
+    :selected => [['★', 1]] %>
+  <%= m.submit %>
 <% end %>
