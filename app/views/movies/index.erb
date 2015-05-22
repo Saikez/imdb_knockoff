@@ -1,8 +1,6 @@
 <h1>Movie List!</h1>
 <ol>
   <% @movies.each do |movie| %>
-    <li><%= movie.name %></li>
+    <li><%= link_to "#{movie.name}", "/movies/#{movie.id}" %></li>
   <% end %>
 </ol>
-
-<a href='/movies/new'>New Movie?</a>

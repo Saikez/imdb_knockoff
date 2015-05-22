@@ -1,9 +1,16 @@
 <html>
   <head>
+    <%= stylesheet_link_tag 'style' %>
     <title>Totally IMDB!!!</title>
     <h1>Your Own Personal IMDB!</h1>
   </head>
-  <body bgcolor='yellow'>
+  <body>
+    <!-- Navigation bar -->
+    <ul class="navbar">
+      <li><a href='/session/new'>Login</a></li>
+      <li><a href='/movies'>Movie List</a></li>
+      <li><a href='/movies/new'>New Movie</a></li>
+    </ul>
 
     <%= yield %>
   </body>

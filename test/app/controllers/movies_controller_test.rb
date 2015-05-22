@@ -23,7 +23,7 @@ describe 'GET /movies' do
   it 'has a `new movie` link' do
     get '/movies'
 
-    assert_includes last_response.body, 'New Movie?'
+    assert_includes last_response.body, 'New Movie'
   end
 end
 

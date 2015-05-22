@@ -1,13 +1,11 @@
-<% form_for(:movie, url_for(:movies, :create)) do %>
-  Name   : <%= text_field_tag :name %><br />
-  Rating : <%= select_tag :rating,
+<% form_for(@movie, url_for(:movies, :create)) do |m| %>
+  Name   : <%= m.text_field :name %><br />
+  Rating : <%= m.select :rating,
     :options => [['★', 1],
                  ['★★', 2],
                  ['★★★', 3],
                  ['★★★★', 4],
                  ['★★★★★', 5]],
     :selected => [['★', 1]] %><br />
-  <%= submit_tag %><br />
+  <%= m.submit %><br />
 <% end %>
-
-<a href='/movies'>List Movies</a>

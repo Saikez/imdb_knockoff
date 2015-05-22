@@ -4,11 +4,13 @@ ImdbKnockoff::App.controllers :movies do
   end
 
   get :new do
+    @movie = Movie.new
+
     render :new
   end
 
   post :create do
-    movie = Movie.create!(name: params['name'], rating: params['rating'])
+    movie = Movie.create!(params[:movie])
 
     redirect url(:movies, :show, id: movie.id)
   end

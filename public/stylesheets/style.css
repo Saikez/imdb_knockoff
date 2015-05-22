@@ -1,0 +1,44 @@
+body {
+  padding-left: 11em;
+  font-family: Verdana, "Times New Roman", Times, serif;
+  background-color: #d8da3d;
+  color: purple;
+}
+
+ul.navbar {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+  width: 9em;
+}
+
+ul.navbar li {
+  display: block;
+  background: white;
+  margin: 0.5em 0;
+  padding: 0.3em;
+  border-left: 1em solid #3d8ada;
+}
+
+ul.navbar a {
+  text-decoration: none
+}
+
+ul.navbar a:hover {
+  text-decoration: underline;
+}
+
+ul.navbar a:visited {
+  color: #b30000;
+}
+
+a:link {
+  color: blue;
+}
+
+a:visited {
+  color: green;
+}
