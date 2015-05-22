@@ -19,6 +19,12 @@ ImdbKnockoff::App.controllers :movies do
     end
   end
 
+  get :edit, map: 'movies/:id/edit' do
+    @movie = Movie.find(params[:id])
+
+    render :edit
+  end
+
   get :show, map: 'movies/:id' do
     @movie = Movie.find(params[:id])
 

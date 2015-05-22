@@ -83,11 +83,21 @@ describe 'POST /movies' do
       jaws = Movie.first
 
       assert_equal jaws.name, 'Jaws'
-      assert_equal jaws.rating, '5'
+      assert_equal jaws.rating, 5
     end
 
     it 'redirects to our new movie' do
       assert last_response.redirect?
     end
+  end
+end
+
+describe 'GET /movies:id/edit' do
+  it 'can edit a movie' do
+    @movie = Movie.create!(name: 'Jaws', rating: 5)
+    get "/movies/#{@movie.id}/edit", { movie: { name: 'Not Jaws', rating: 3 } }, { 'rack.session' => { authenticated: true } }
+
+    assert_equal @movie.name, 'Not Jaws'
+    assert_equal @movie.rating, 3
   end
 end
