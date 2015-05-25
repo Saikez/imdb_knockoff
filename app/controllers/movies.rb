@@ -1,12 +1,12 @@
 ImdbKnockoff::App.controllers :movies do
-  before :new, :create, :edit do
-    redirect url(:session, :new) unless session[:authenticated]
+  before :new, :create, :edit, :update, :delete do
+    redirect url(:session, :new) unless session[:authenticated] || Padrino.env == :production
   end
 
   get :new do
     @movie = Movie.new
 
-    render :new
+    render :new, locals: { path: url(:movies, :create), meth: :post }
   end
 
   post :create do
@@ -15,28 +15,34 @@ ImdbKnockoff::App.controllers :movies do
     if @movie.valid?
       redirect url(:movies, :show, id: @movie.id)
     else
-      render :new
+      render :new, locals: { path: url(:movies, :create), meth: :post }
     end
   end
 
-  put :update, map: '/movies/:id/update' do
-    @movie = Movie.find(params[:id])
+  delete :delete, map: '/movies/:id' do
+    Movie.delete(params[:id])
+    @movies = Movie.all
 
-    @movie.update_attributes(params[:movie])
+    redirect url(:movies, :index)
   end
 
-  get :edit, map: 'movies/:id/edit' do
+  put :update, map: '/movies/:id' do
     @movie = Movie.find(params[:id])
 
-    if @movie.valid?
-      Movie.update(@movie.id, params[:movie])
+    if @movie.update(params[:movie])
       redirect url(:movies, :show, id: @movie.id)
     else
-      render :edit
+      render :new, locals: { path: url(:movies, :update, id: @movie.id), meth: :put }
     end
   end
 
-  get :show, map: 'movies/:id' do
+  get :edit, map: '/movies/:id/edit' do
+    @movie = Movie.find(params[:id])
+
+    render :new, locals: { path: url(:movies, :update, id: @movie.id), meth: :put }
+  end
+
+  get :show, map: '/movies/:id' do
     @movie = Movie.find(params[:id])
 
     render :show

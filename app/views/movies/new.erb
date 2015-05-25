@@ -1,4 +1,4 @@
-<% form_for(@movie, url_for(:movies, :create)) do |m| %>
+<% form_for(@movie, path, method: meth) do |m| %>
   <% if @movie.errors.present? %>
     <h2>Whoops!</h2>
     <ul>

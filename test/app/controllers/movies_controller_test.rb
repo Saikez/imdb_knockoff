@@ -4,25 +4,19 @@ describe 'GET /movies' do
   before do
     @movie = Movie.create!(name: 'Jaws', rating: 5)
     @movie2 = Movie.create!(name: 'Jaws 2', rating: 3)
-    get "/movies/#{@movie.id}"
+    get '/movies'
   end
 
   it 'responds OK' do
-    get '/movies'
-
     assert last_response.ok?
   end
 
   it 'lists the saved movies' do
-    get '/movies'
-
     assert_includes last_response.body, @movie.name
     assert_includes last_response.body, @movie2.name
   end
 
   it 'has a `new movie` link' do
-    get '/movies'
-
     assert_includes last_response.body, 'New Movie'
   end
 end
@@ -62,7 +56,7 @@ describe 'GET /movies/:id' do
   end
 end
 
-describe 'POST /movies' do
+describe 'POST /movies/create' do
   describe 'when unauthenticated' do
     it 'redirects to the login page' do
       post '/movies/create', { movie: { name: 'Jaws', rating: 5 } }
@@ -113,10 +107,64 @@ describe 'GET /movies/:id/edit' do
         { movie: { name: 'Not Jaws', rating: 3 } },
         { 'rack.session' => { authenticated: true } }
 
-      @movie.reload
+      @movie = Movie.find(@movie.id)
+
+      assert_includes last_response.body, @movie.name
+      assert_includes last_response.body, @movie.rating.to_s
+    end
+  end
+end
+
+describe 'PUT /movies/:id' do
+  before do
+    @movie = Movie.create!(name: 'Jaws', rating: 5)
+  end
+
+  describe 'when unauthenticated' do
+    it 'redirects to the login page' do
+      put "/movies/#{@movie.id}",
+        { movie: { name: 'Not Jaws', rating: 3 } }
+
+      assert last_response.redirect?, 'Not redirecting'
+      assert_includes last_response.location, '/session/new'
+    end
+  end
+
+  describe 'when authenticated' do
+    it 'can update a a movie' do
+      put "/movies/#{@movie.id}",
+        { movie: { name: 'Not Jaws', rating: 3 } },
+        { 'rack.session' => { authenticated: true } }
+
+      @movie = Movie.find(@movie.id)
 
       assert_equal @movie.name, 'Not Jaws'
       assert_equal @movie.rating, 3
+    end
+  end
+end
+
+describe 'DELETE /movies/:id' do
+  before do
+    @movie = Movie.create(name: 'Jaws', rating: 5)
+  end
+
+  describe 'when unauthenticated' do
+    it 'redirects to the login page' do
+      delete "/movies/#{@movie.id}"
+
+      assert last_response.redirect?, 'Not redirecting'
+      assert_includes last_response.location, '/session/new'
+    end
+  end
+
+  describe 'when authenticated' do
+    it 'can delete a movie' do
+      delete "/movies/#{@movie.id}",
+        {},
+        { 'rack.session' => { authenticated: true } }
+
+      assert_equal false, Movie.exists?(@movie.id)
     end
   end
 end

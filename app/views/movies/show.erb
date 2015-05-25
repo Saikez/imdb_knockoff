@@ -1,3 +1,9 @@
 <h1><%= @movie.name %></h1>
 <p>Your rating for this movie is: <b><%= '★' * @movie.rating.to_i %></b></p>
 <br />
+<% form_for(@movie, "/movies/#{@movie.id}/edit", method: :get) do |m| %>
+  <%= m.submit('Edit') %>
+<% end %>
+<% form_for(@movie, "/movies/#{@movie.id}", method: :delete) do |m| %>
+  <%= m.submit('Delete') %>
+<% end %>
